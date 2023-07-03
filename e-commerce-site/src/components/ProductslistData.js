@@ -274,7 +274,7 @@ const ProductslistData =
       },
       "Stock": 9
     }
-  ]
+  ];
   
 
 
