@@ -1,26 +1,32 @@
-
+import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
-import './styles/homepage.css';
 import About from './pages/About';
-import Productlist from './pages/Productlist';
-import ProductView from './pages/Productview';
 import Cart from './pages/Cart';
+import Productlist from './pages/Productlist';
+import Productview from './pages/Productview';
 import Checkout from './pages/Checkout';
+import { Initializer } from './components/reducer/initialreducer';
 
 
 
 
 function App() {
   return (
-    <div>
-     <Home /><br/><br/>
-     <About/><br/><br/>
-     <Productlist/><br/><br/>
-     <ProductView/><br/><br/>
-     <Cart/><br/><br/>
-     <Checkout/>
-  
-    </div>
+<Initializer>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/productlist" element={<Productlist />} />
+        <Route path="/Productview" element={<Productview />} />
+        <Route path="/Checkout" element={<Checkout />} />
+
+
+      </Routes>
+    </BrowserRouter>
+    </Initializer>
   );
 }
 

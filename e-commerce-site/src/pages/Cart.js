@@ -1,92 +1,157 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faMinus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import Header from '../components/Header';
 import homeProducts from '../components/homeProducts';
-import macbookImage from '../assets/explore-img/macbook.png';
+import { Link } from 'react-router-dom';
+import { dataProvider } from '../components/reducer/initialreducer';
+import ProductsviewData from '../components/ProductsviewData';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../styles/cart.css';
+
 
 function Cart() {
-  const [quantity, setQuantity] = useState(1);
-  const price = 80000; 
+  const { removeFromCart,cartInfo, updateCount } = useContext(dataProvider);
+  const price = 80000;
 
-  const increaseQuantity = () => {
-    setQuantity(quantity + 1);
-  };
-
-  const decreaseQuantity = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
+ 
+  const increaseQuantity = (item, id) => {
+    const index = cartInfo.findIndex(element => element.id === id);
+  
+    if (index !== -1) {
+      const updatedCart = [...cartInfo]; // Create a shallow copy of cartInfo
+      updatedCart[index].count += 1; // Update the count
+      updateCount(id, updatedCart[index].count); // Pass the new count to the updateCount function
     }
   };
+  
+  const decreaseQuantity = (item, id) => {
+    const index = cartInfo.findIndex(element => element.id === id);
+  
+    if (index !== -1) {
 
-  const getTotalPrice = () => {
-    return quantity * price;
+      const updatedCart = [...cartInfo]; // Create a shallow copy of cartInfo
+      if (updatedCart[index].count > 0) {
+        updatedCart[index].count -= 1; // Update the count only if it is greater than 0
+        if(updatedCart[index].count==0){
+          const isremove = window.confirm('Are you sure you want to remove the product from the cart?');
+          if (isremove) {
+            // Perform the necessary action
+            // Add your code here
+            handleRemove(id)
+            console.log('Action confirmed!');
+          } else {
+            // User cancelled the action
+            console.log('Action cancelled!');
+          }
+        }
+        updateCount(id, updatedCart[index].count); // Pass the new count to the updateCount function
+      }
+    }
   };
+  
 
-  const handleRemove = () => {
-    
-  };
+const getTotalPrice = () => {
+  return  price;
+};
 
-  const handlePlaceOrder = () => {
-    
-  };
+const handleRemove = (id) => {
+removeFromCart(id)
+};
 
-  return (
-    <div>
-      <Header />
+const handlePlaceOrder = () => {
 
-      <div style={styles.container}>
-        <div style={styles.card}>
-          <div style={styles.productInfo}>
-            <div style={styles.imageContainer}>
-              <img src={macbookImage} alt="macbook" style={styles.image} />
-              <div style={styles.iconContainer}>
-                <button style={styles.iconButton} onClick={increaseQuantity}>
-                  <FontAwesomeIcon icon={faPlus} size="lg" style={styles.icon} />
-                </button>
-                <span style={styles.quantity}>{quantity}</span>
-                <button style={styles.iconButton} onClick={decreaseQuantity}>
-                  <FontAwesomeIcon icon={faMinus} size="lg" style={styles.icon} />
-                </button>
+};
+
+
+return (
+  <div>
+    <Header />
+
+    <div className="cart-container" style={{ fontFamily: 'Chivo Mono' }}>
+      <div className="row">
+        <div className="col-8">
+          <div className="card">
+            {
+            cartInfo.map  (item =>(
+          
+              <div className="productInfo" key={item.id}>
+
+                <div className="imageContainer ">
+                  <p className="Description">
+                    <b>{ProductsviewData[item.id].Description}</b>
+                  </p>
+                  <img src={ProductsviewData[item.id].imgSrc} alt="img" className="cart-image" />
+
+
+
+
+                  <p className="productTitle">
+                    <b>{ProductsviewData[item.id].Name}</b>
+                  </p>
+
+                  <div className="productContent ">
+
+                    <div className="price">₹ {ProductsviewData[item.id].Price["Original Price"]}</div>
+                    <button className="removeButton" onClick={()=>handleRemove(item.id)} style={{ marginLeft: '250px', borderRadius: '5px' }}>
+                      <FontAwesomeIcon icon={faTrash} size="lg" className="removeIcon" /> Remove
+                    </button>
+                  </div>
+                </div>
+
+
+                <div className="iconContainer">
+                  <button className="iconButton" onClick={() => increaseQuantity(item,item.id)}>
+                    <FontAwesomeIcon icon={faPlus} size="lg" className="icon" />
+                  </button>
+                  <span className="cart">
+                    {item.count}
+                  </span>
+                  <button className="iconButton" onClick={() => decreaseQuantity(item,item.id)}>
+                    <FontAwesomeIcon icon={faMinus} size="lg" className="icon" />
+                  </button>
+                </div>
               </div>
-            </div>
-            <div style={styles.productContent}>
-              <p style={styles.productTitle}>
-                <b>Apple 2020 MacBook Air Laptop M1 Chip, 13" Retina Display, 8GB RAM, 256GB SSD Storage, Backlit Keyboard, FaceTime HD Camera, Touch ID. Works with iPhone/iPad; Space Gray.</b>
-              </p>
-              <div style={styles.price}>₹ {getTotalPrice()}</div>
-              <button style={styles.removeButton} onClick={handleRemove}>
-                <FontAwesomeIcon icon={faTrash} size="lg" style={styles.removeIcon} />
-                Remove
-              </button>
-            </div>
+
+            ))
+            }
           </div>
         </div>
 
-        <div style={styles.card}>
-          <div style={styles.priceDetails}>
-            <div style={styles.priceItem}>
-              <div><b>Price (1 item):</b>  ₹ {getTotalPrice()}</div>   
-            </div>
-            <div style={styles.priceItem}>
-              <div><b>Delivery Charge:</b> Free</div>
-              
-            </div>
-            <div style={styles.totalAmount}>
-              <div>Total Amount</div>
-              <div>₹ {getTotalPrice()}</div>
-            </div>
-            <div style={styles.placeOrderButton}>
-              <button onClick={handlePlaceOrder}>Place Order</button>
+        <div className="col-4">
+          <div className="card">
+            <div className="priceDetails">
+              <div className="priceItem">
+                <div>
+                  <b>Price (1 item) : </b> ₹ {getTotalPrice()}
+                </div>
+              </div>
+              <div className="priceItem">
+                <div>
+                  <b>Delivery Charge : </b> Free
+                </div>
+              </div><hr />
+              <div className="totalAmount">
+                <div><b>Total Amount : </b> ₹ {getTotalPrice()}</div>
+              </div><br />
+              <div className="placeOrderButton">
+                <Link to="/Checkout">
+                  <center>
+                    <button onClick={handlePlaceOrder} className="btn btn-primary">
+                      Place Order
+                    </button></center>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
+
       <div>
         <center>
-          <h1>
-            Products<span style={{ color: '#fe2d02' }}> Available</span>
+          <h1><b>
+            Products<span style={{ color: '#fe2d02' }}> Available</span></b>
           </h1>
         </center>
       </div>
@@ -98,126 +163,12 @@ function Cart() {
               alt={`Product ${index + 1}`}
               className="product-image"
             />
-            <h2>{homeProducts.products[index].title}</h2>
+            <h4>{homeProducts.products[index].title}</h4>
           </div>
         ))}
       </div>
     </div>
-  );
+  </div>
+);
 }
-
-const styles = {
-  container: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%',
-    borderBottom: '1px solid black',
-  },
-  card: {
-    flexBasis: '50%',
-    display: 'flex',
-    flexDirection: 'column',
-    maxWidth: '500px',
-    height: '300px',
-    padding: '20px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)',
-    borderRadius: '5px',
-    margin: '0 10px',
-    marginTop:'20px',
-    marginBottom:'80px',
-  },
-  productInfo: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  imageContainer: {
-    position: 'relative',
-    width: '100%',
-  },
-  image: {
-    width: '200%',
-    height: 'auto',
-    marginBottom: '10px',
-  },
-  iconContainer: {
-    position: 'absolute',
-    bottom: '10px',
-    right: '-40px',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: '-50px',
-  },
-  iconButton: {
-    background: '#fe2d02',
-    border: 'none',
-    cursor: 'pointer',
-    padding: '5px',
-    margin: '0',
-  },
-  icon: {
-    margin: '4 5px',
-    color: 'white',
-  },
-  quantity: {
-    margin: '0 10px',
-    fontSize: '1.2rem',
-    fontWeight: 'bold',
-    color: 'black',
-  },
-  productContent: {
-    marginLeft: '120px',
-    flexGrow: 1,
-    textAlign: 'justify',
-  },
-  productTitle: {
-    marginBottom: '10px',
-  },
-  price: {
-    fontSize: '1.2rem',
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginTop: '30px',
-    color: 'red',
-  },
-  removeButton: {
-    background: '#fe2d02',
-    border: 'none',
-    cursor: 'pointer',
-    padding: '5px',
-    color: 'white',
-    marginTop: '10px',
-    display: 'flex',
-    alignItems: 'center',
-  },
-  removeIcon: {
-    marginRight: '5px',
-  },
-  priceDetails: {
-    marginTop: '20px',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-end',
-  },
-  priceItem: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    marginBottom: '10px',
-  },
-  totalAmount: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    marginTop: '10px',
-    fontWeight: 'bold',
-    fontSize: '1.2rem',
-  },
-  placeOrderButton: {
-    display: 'flex',
-    justifyContent: 'center',
-    marginTop: '20px',
-  },
-};
-
 export default Cart;
