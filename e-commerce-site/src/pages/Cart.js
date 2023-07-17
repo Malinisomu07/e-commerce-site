@@ -41,6 +41,7 @@ function Cart() {
             handleRemove(id)
             console.log('Action confirmed!');
           } else {
+            updatedCart[index].count += 1;
             // User cancelled the action
             console.log('Action cancelled!');
           }
