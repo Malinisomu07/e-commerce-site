@@ -7,7 +7,6 @@ const Initializer = (props)=>{
     const[cartInfo, setcartInfo] = useReducer(cartOperation, initialValue);
     const[placeOrder, setplaceOrder] = useReducer(orderDetails, orderValue);
 
-    console.log("orderdata",placeOrder )
     function orderDetails(orderValue, order) {
       switch (order.type) {
         case "ADD_ORDER":
@@ -80,12 +79,12 @@ const Initializer = (props)=>{
           return [];
         }
       
-        console.log('asda', initialvalue);
-        console.log('123', operation);
+        // console.log('asda', initialvalue);
+        // console.log('123', operation);
       }
       
       function addtoCart(id,price) {
-        console.log("price", price)
+        // console.log("price", price)
         setcartInfo({ action: "add", id: id, "price":price });
       }
       

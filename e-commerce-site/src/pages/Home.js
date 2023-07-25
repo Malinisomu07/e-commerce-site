@@ -22,10 +22,10 @@ function Home() {
         <div className="product-container">
           {Object.keys(homeProducts.products).map((key, index) => (
             <div key={index} className="product-item">
-              <img src={homeProducts.products[index].imgSrc} alt={`Product ${index + 1}`} className="product-image" />
-              <h3>{homeProducts.products[index].title}</h3>
+              <img src={homeProducts.products[index].imgSrc} alt={`Product ${index + 1}`} className="product-image" /><br/><br/>
+              <h5>{homeProducts.products[index].title}</h5>
               <Link to="/productlist">
-                <button>{homeProducts.products[index].buttonText}</button>
+                <button className='explore'>{homeProducts.products[index].buttonText}</button>
               </Link>
             </div>
           ))}

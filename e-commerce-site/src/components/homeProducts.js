@@ -14,9 +14,9 @@ const homeProducts = {
   products: [
     {
       className: "product-item",
-      imgSrc: product1Image,
-      imgAlt: "Product 1",
-      title: "Gaming Accessories",
+      imgSrc: product8Image,
+      imgAlt: "Product 8",
+      title: "Electronics & Gadgets",
       buttonText: "Explore More"
     },
     {
@@ -28,16 +28,16 @@ const homeProducts = {
     },
     {
       className: "product-item",
-      imgSrc: product3Image,
+      imgSrc: product4Image,
       imgAlt: "Product 3",
       title: "For your Fitness Needs",
       buttonText: "Explore More"
     },
     {
       className: "product-item",
-      imgSrc: product4Image,
+      imgSrc: product3Image,
       imgAlt: "Product 4",
-      title: "Home & Kitchen",
+      title: "Home & Kitchen Rugs",
       buttonText: "Explore More"
     },
     {
@@ -51,7 +51,7 @@ const homeProducts = {
       className: "product-item",
       imgSrc: product6Image,
       imgAlt: "Product 6",
-      title: "Personal Care products",
+      title: "Personal Care",
       buttonText: "Explore More"
     },
     {
@@ -63,16 +63,16 @@ const homeProducts = {
     },
     {
       className: "product-item",
-      imgSrc: product8Image,
-      imgAlt: "Product 8",
-      title: "Electronics",
+      imgSrc: product1Image,
+      imgAlt: "Product 1",
+      title: "Gaming Accessories",
       buttonText: "Explore More"
     },
     {
       className: "product-item",
       imgSrc: product9Image,
       imgAlt: "Product 9",
-      title: "Shop deals in Fashion",
+      title: "Deals in Fashion",
       buttonText: "Explore More"
     },
     {
