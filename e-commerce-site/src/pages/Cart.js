@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faMinus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import Header from '../components/Header';
@@ -12,8 +12,6 @@ import '../styles/cart.css';
 
 function Cart() {
   const { removeFromCart,cartInfo, updateCount } = useContext(dataProvider);
-  const price = 80000;
-
  
   const increaseQuantity = (item, id) => {
     const index = cartInfo.findIndex(element => element.id === id);
@@ -52,15 +50,29 @@ function Cart() {
   };
   
 
-const getTotalPrice = () => {
-  return  price;
-};
+  const getTotalPrice = () => {
+    const totalPrice = cartInfo.reduce((total, item) => {
+      return total + item.price * item.count;
+    }, 0);
+    return totalPrice;
+  };
+ 
+
+  const getTotalCount = () => {
+    const totalCount = cartInfo.reduce((total, item) => {
+      return total + item.count;
+    }, 0);
+    return totalCount;
+  };
+
+  
 
 const handleRemove = (id) => {
 removeFromCart(id)
 };
 
-const handlePlaceOrder = () => {
+const handlCheckOut = () => {
+
 
 };
 
@@ -71,32 +83,32 @@ return (
 
     <div className="cart-container" style={{ fontFamily: 'Chivo Mono' }}>
       <div className="row">
-        <div className="col-8">
+      <div className="col-lg-8 col-md-12">
           <div className="card">
-            {
-            cartInfo.map  (item =>(
-          
+            {cartInfo.map  ((item) =>(
               <div className="productInfo" key={item.id}>
-
+                <div className="row">
+                <div className="col-lg-4 col-md-4">
                 <div className="imageContainer ">
+                <img src={ProductsviewData[item.id].imgSrc} alt="img" className="cart-image" />
+                </div>
+          </div>
+
+          <div className="col-lg-8 col-md-8">
+            <div className="productContent">
+            <p className="productTitle">
+                   <h4><b>{ProductsviewData[item.id].Name}</b></h4> 
+                  </p>
                   <p className="Description">
                     <b>{ProductsviewData[item.id].Description}</b>
                   </p>
-                  <img src={ProductsviewData[item.id].imgSrc} alt="img" className="cart-image" />
-
-
-
-
-                  <p className="productTitle">
-                    <b>{ProductsviewData[item.id].Name}</b>
-                  </p>
-
-                  <div className="productContent ">
-
-                    <div className="price">₹ {ProductsviewData[item.id].Price["Original Price"]}</div>
+                  
+                    <div className="price">Price : ₹ {ProductsviewData[item.id].Price["Offer Price"]}</div>
+                    <div className="removeButtonWrapper">
                     <button className="removeButton" onClick={()=>handleRemove(item.id)} style={{ marginLeft: '250px', borderRadius: '5px' }}>
                       <FontAwesomeIcon icon={faTrash} size="lg" className="removeIcon" /> Remove
                     </button>
+                    </div>
                   </div>
                 </div>
 
@@ -111,20 +123,20 @@ return (
                   <button className="iconButton" onClick={() => decreaseQuantity(item,item.id)}>
                     <FontAwesomeIcon icon={faMinus} size="lg" className="icon" />
                   </button>
-                </div>
-              </div>
-
-            ))
-            }
+                  </div>
+          </div>
+        </div>
+    ))}
           </div>
         </div>
 
-        <div className="col-4">
+        <div className="col-lg-4 col-md-12">
           <div className="card">
             <div className="priceDetails">
               <div className="priceItem">
                 <div>
-                  <b>Price (1 item) : </b> ₹ {getTotalPrice()}
+                {/* <b>Price (1 item) : </b> ₹ {ProductsviewData[cartInfo[0]?.id]?.Price["Offer Price"]} */}
+                  <b>Price ({getTotalCount()} item) : </b> ₹ {getTotalPrice()}
                 </div>
               </div>
               <div className="priceItem">
@@ -135,11 +147,11 @@ return (
               <div className="totalAmount">
                 <div><b>Total Amount : </b> ₹ {getTotalPrice()}</div>
               </div><br />
-              <div className="placeOrderButton">
+              <div className="CheckOutButton">
                 <Link to="/Checkout">
                   <center>
-                    <button onClick={handlePlaceOrder} className="btn btn-primary">
-                      Place Order
+                    <button onClick={handlCheckOut} className="btn btn-primary">
+                      CheckOut
                     </button></center>
                 </Link>
               </div>
@@ -147,7 +159,7 @@ return (
           </div>
         </div>
       </div>
-
+<br/><br/>
 
       <div>
         <center>

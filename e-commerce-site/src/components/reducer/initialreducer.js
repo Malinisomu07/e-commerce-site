@@ -2,17 +2,26 @@ import React, { createContext, useReducer, useContext } from "react";
 const dataProvider = createContext([]);
 
 const Initializer = (props)=>{
-    const initialValue = [
-         {
-           "id": "987123",
-            "count": 1
-        },   
-           {
-            "id": "234545",
-             "count": 2
-         }
-    ]
+    const initialValue = [ ];
+    const orderValue = [ ];
     const[cartInfo, setcartInfo] = useReducer(cartOperation, initialValue);
+    const[placeOrder, setplaceOrder] = useReducer(orderDetails, orderValue);
+
+    console.log("orderdata",placeOrder )
+    function orderDetails(orderValue, order) {
+      switch (order.type) {
+        case "ADD_ORDER":
+          return [...orderValue, order.payload];
+        default:
+          return orderValue;
+      }
+    }
+
+    function addOrder(orderData) {
+      setplaceOrder({ type: "ADD_ORDER", payload: orderData });
+    }
+
+
 
     function CheckID(items, id) {
         if (!Array.isArray(items)) {
@@ -33,7 +42,7 @@ const Initializer = (props)=>{
     
 
       function cartOperation(initialvalue, operation) {
-        console.log("op", initialvalue);
+        console.log("initial", initialvalue);
       
         if (operation.action === 'add') {
           if (CheckID(initialvalue, operation.id)) {
@@ -45,7 +54,7 @@ const Initializer = (props)=>{
               return item;
             });
           } else {
-            initialvalue.push({ "id": operation.id, "count": 1 });
+            initialvalue.push({ "id": operation.id, "count": 1, "price":operation.price });
             alert('Item Added Successfully');
             return initialvalue;
           }
@@ -67,13 +76,17 @@ const Initializer = (props)=>{
               return item;
             });
         }
+        else if(operation.action=="clearCart"){
+          return [];
+        }
       
         console.log('asda', initialvalue);
         console.log('123', operation);
       }
       
-      function addtoCart(id) {
-        setcartInfo({ action: "add", id: id });
+      function addtoCart(id,price) {
+        console.log("price", price)
+        setcartInfo({ action: "add", id: id, "price":price });
       }
       
       function updateCount(id,count) {
@@ -83,12 +96,16 @@ const Initializer = (props)=>{
       function removeFromCart(id) {
         setcartInfo({ action: "remove", id: id });
       }
+
+      function clearCart() {
+        setcartInfo({ action: "clearCart" });
+      }
       
     
      
 
 return(<>
-    <dataProvider.Provider value={{addtoCart,cartInfo,removeFromCart,updateCount }}>
+    <dataProvider.Provider value={{addtoCart,cartInfo,removeFromCart,updateCount, addOrder,clearCart }}>
             {props.children}
     </dataProvider.Provider>
 </>)

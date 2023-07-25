@@ -42,7 +42,7 @@ function ProductView() {
                 <button style={styles.button}>Buy now</button>
               </Link>
              
-                <button onClick={()=>addtoCart(id)} style={styles.button}> Add to Cart</button>
+                <button onClick={()=>addtoCart(id,product.Price['Offer Price'])} style={styles.button}> Add to Cart</button>
                
             </div>
           </div>

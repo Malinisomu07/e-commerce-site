@@ -62,7 +62,7 @@ function Store() {
                         <img src={product.image} className="product-img"/>
                         <h2>{product.name}</h2>
                         <h3>Rs.{product.price}</h3>
-                        <button onClick={()=>{addtocart(product)}}>Add to cart</button>
+                        <button onClick={()=>{addtocart(product,product.price)}}>Add to cart</button>
                     </div>
                 </>)
             })}
